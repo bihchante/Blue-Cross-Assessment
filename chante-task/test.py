@@ -2,7 +2,7 @@
 import os
 import ftplib
 file_to_upload = "/opt/src/*"
-server = '192.168.43.1'
+server = '172.31.23.168'
 username = 'ftpuser'
 password = 'ftpuserpwd'
 ftp_connection = ftplib.FTP(server, username, password)
