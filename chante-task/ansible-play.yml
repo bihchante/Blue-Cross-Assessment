@@ -35,8 +35,8 @@
         path: /srv/ftp
         state: directory
         mode: 0755
-        owner: chante
-        group: chante
+        owner: ftpuser
+        group: ftpuser
 
     - name: Modify FTP configuation
       lineinfile:
