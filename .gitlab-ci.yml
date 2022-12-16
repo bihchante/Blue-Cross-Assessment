@@ -1,0 +1,21 @@
+stages:
+  - docker_build_and_push
+  - deploy_k8s_job
+
+variables:
+  IMAGE_TAG: chante/file_transfer_app:v1.0
+  
+
+
+docker_build_and_push:
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $IMAGE_TAG .
+    - docker push $IMAGE_TAG
+
+deploy_k8s_job:
+  script:
+    - echo $kube_config |base64 -d > $KUBECONFIG
+    - kubectl apply -f nfs-pv.yml
+    - kubectl apply -f nfs-pvc.yml
+    - kubectl apply -f cronjob-efs.yml

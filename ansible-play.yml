@@ -1,0 +1,65 @@
+- name: Deploy VSFTP
+  hosts: server1 # ftp server
+  become: yes
+  tasks:
+    - name: Install FTP package on Ubuntu
+      apt:
+        name: vsftpd
+        state: present  
+    - name: Install Firewalld package on Ubuntu
+      apt:
+        name: firewalld
+        state: present
+
+    - name: Start firewall Service
+      service: name=firewalld state=started enabled=yes
+      
+    - name: Start FTP Service
+      service: name=vsftpd state=started enabled=yes
+  
+# Allow  FTP services on Ubuntu Firewall   
+    - name: Allow FTP service in Firewall
+      firewalld: port=21/tcp permanent=true state=enabled immediate=true
+
+    - name: Allow FTP service in Firewall
+      firewalld: port=20/tcp permanent=true state=enabled immediate=true
+
+    - name: Add the user ftp
+      ansible.builtin.user:
+        name: ftpuser
+        comment: ftpuser
+        password: ftpuserpwd
+# Modify FTP server configuration to allow ftpuser access.
+    - name: Create if not present
+      file:
+        path: /srv/ftp
+        state: directory
+        mode: 0755
+        owner: chante
+        group: chante
+
+    - name: Modify FTP configuation
+      lineinfile:
+        dest: /etc/vsftpd.conf
+        backup: yes
+        backrefs: yes
+        state: present
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      with_items:
+        - { regexp: listen=NO, line: listen=YES }
+        - { regexp: listen_ipv6=YES, line: listen_ipv6=NO }
+        - { regexp: local_enable, line: local_enable=YES }
+        - { regexp: write_enable=NO, line: write_enable=YES }
+
+    - name: Ansible delete file glob
+      replace:
+        path: /etc/vsftpd.conf
+        regexp: '^#(.*write_enable=YES.*)'
+        replace: '\1'
+    
+# Reload FTP service to apply above changes.
+    - name: Start FTP service
+      service: name=vsftpd state=restarted enabled=yes
+
+ 

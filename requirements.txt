@@ -1,0 +1,7 @@
+
+
+create dir like /data
+add sg rule in efs sg
+sudo mount -t efs -o tls fs-0b518e0df01336e75:/ /data #copy command from attach section of aws efs and replase efs dir with you data dir
+
+
