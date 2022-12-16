@@ -1,7 +1,7 @@
 # Blue-Cross-Assessment: "file_transfer_app"
 I run a cronjob to move files from nfs location (source) to server location using python3 where ansible will be running
-create dockerfile specifying base image, python program to help in moving files, location to cpoy files, execute the python program
-monunt nfs location
+create dockerfile specifying base image, python program to help in moving files, location to cpoy files, execute the python program,
+mounnt nfs location
 create ansible playbook 
 - specifying FTP instalation, 
 - start firewall service (since it isalready pressent on my ubuntu server)
