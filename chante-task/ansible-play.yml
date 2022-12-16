@@ -6,9 +6,9 @@
       apt:
         name: vsftpd
         state: present  
-    - name: Install Firewall package on Ubuntu
+    - name: Install Firewalld package on Ubuntu
       apt:
-        name: firewalld
+        name: firewall
         state: present
 
     - name: Start firewall Service
@@ -17,8 +17,8 @@
     - name: Start FTP Service
       service: name=vsftpd state=started enabled=yes
   
-# Allow  FTP services on Ubuntu Firewall   
-    - name: Allow FTP service in Firewall
+# Allow  FTP services on Ubuntu Firewalld   
+    - name: Allow FTP service in Firewalld
       firewalld: port=21/tcp permanent=true state=enabled immediate=true
 
     - name: Allow FTP service in Firewall
